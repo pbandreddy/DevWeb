@@ -39,7 +39,31 @@ load.action("Action", async function () {
         load.log("Test Failed.", load.LogLevel.error);
         T01.stop(load.TransactionStatus.Failed);
     }
+
+    const auth = new load.WebRequest({
+        url: "https://developer-stg.api.com/authentication/v2/token",
+        method: "POST",
+        returnBody: true,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: {
+            "client_id": load.decrypt(""),
+            "client_secret": load.decrypt(""),
+            "grant_type": "client_credentials",
+            "scope": "data:read"
+        },
+    }).sendSync();
 });
 
 load.finalize("Finalize", async function () {
 });
+
+
+OfflineGenerator.exe -mode=har -level=pages
+
+DevWebUtils -mode=genKey -keyLocation=generatedKey.txt Passphrase
+DevWebUtils -mode=enc -keyLocation=generatedKey.txt passcode
+
+
+load.decrypt("")
